@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tiny Hello World Compliments</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  font-size:16px;
+  font-family:'Nunito',system-ui,sans-serif;
+  color:#2d2d2d;
+  --accent:#ff9eb5;
+  --accent-dark:#ff83a0;
+  --glass-bg:rgba(255,255,255,0.7);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#fce1ef,#d4f0f7 70%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.card{
+  width:100%;
+  max-width:420px;
+  background:var(--glass-bg);
+  border-radius:24px;
+  box-shadow:0 20px 50px rgba(255,132,180,0.35);
+  border:1px solid rgba(255,255,255,0.8);
+  backdrop-filter:blur(10px);
+  text-align:center;
+  padding:40px 32px 48px;
+}
+h1{
+  font-size:2.4rem;
+  margin-bottom:12px;
+  color:#ff6f91;
+}
+p.subtitle{
+  font-size:1rem;
+  color:#5c5c5c;
+  margin-bottom:28px;
+}
+.compliment{
+  min-height:80px;
+  background:rgba(255,255,255,0.9);
+  border-radius:18px;
+  padding:20px;
+  font-size:1.2rem;
+  line-height:1.4;
+  color:#555;
+  margin-bottom:24px;
+  border:1px dashed rgba(255,146,181,0.5);
+  transition:transform 0.2s ease, box-shadow 0.2s ease;
+}
+.compliment.pop{
+  transform:scale(1.02);
+  box-shadow:0 12px 30px rgba(255,132,180,0.3);
+}
+button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.5rem;
+  padding:0.95rem 1.8rem;
+  border-radius:999px;
+  border:none;
+  background:var(--accent);
+  color:white;
+  font-size:1rem;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 12px 25px rgba(255,132,160,0.35);
+  transition:transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 16px 30px rgba(255,132,160,0.45);
+  background:var(--accent-dark);
+}
+button:active{
+  transform:translateY(1px) scale(0.98);
+}
+footer{
+  margin-top:24px;
+  font-size:0.85rem;
+  color:#777;
+}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Hello, World! 🌸</h1>
+  <p class="subtitle">Tap the button to receive a tiny burst of kindness.</p>
+  <div class="compliment" id="complimentBox">You light up the room just by being in it.</div>
+  <button id="complimentBtn">Give me a compliment ✨</button>
+  <footer>Compliments saved locally so you never lose the glow.</footer>
+</div>
+<script>
+const compliments=[
+  "Your smile is a sunrise all on its own.",
+  "You're the cozy feeling of a warm cup of tea.",
+  "You make ordinary moments sparkle.",
+  "Your kindness is wildly contagious.",
+  "You have a heart that hums with joy.",
+  "You're a walking exclamation point of delight!",
+  "Even your shadow has great vibes.",
+  "You're the confetti in life's parade.",
+  "You sprinkle magic wherever you wander.",
+  "If wonderful had a face, it would look like you."
+];
+const box=document.getElementById('complimentBox');
+const btn=document.getElementById('complimentBtn');
+const STORAGE_KEY='tiny-hello-last-compliment';
+function setCompliment(text){
+  box.textContent=text;
+  localStorage.setItem(STORAGE_KEY,text);
+  box.classList.remove('pop');
+  void box.offsetWidth;
+  box.classList.add('pop');
+  setTimeout(()=>box.classList.remove('pop'),400);
+}
+function randomCompliment(){
+  const current=box.textContent;
+  let next;
+  do{
+    next=compliments[Math.floor(Math.random()*compliments.length)];
+  }while(next===current && compliments.length>1);
+  setCompliment(next);
+}
+btn.addEventListener('click',randomCompliment);
+const saved=localStorage.getItem(STORAGE_KEY);
+if(saved && compliments.includes(saved)){
+  box.textContent=saved;
+}else{
+  setCompliment(compliments[0]);
+}
+</script>
+</body>
+</html>
